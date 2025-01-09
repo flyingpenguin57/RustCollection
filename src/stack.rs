@@ -5,7 +5,7 @@ pub struct Node<T> {
 
 pub struct Stack<T> {
     len: u64,
-    top: Option<Box<Node<T>>>,
+    pub top: Option<Box<Node<T>>>,
 }
 
 impl<T: std::fmt::Display> Stack<T> {
@@ -14,10 +14,10 @@ impl<T: std::fmt::Display> Stack<T> {
     pub fn push(&mut self, element: T) {
         //get old top
         let old_top = self.top.take();
-        //new node next = top
-        let new_node = Node{value: element, next: old_top};
+        //create new top, make its next = old top
+        let new_top = Node{value: element, next: old_top};
         //top = new node
-        self.top = Some(Box::new(new_node));
+        self.top = Some(Box::new(new_top));
         //len ++
         self.len += 1;
     }
@@ -33,17 +33,6 @@ impl<T: std::fmt::Display> Stack<T> {
                 Some(node)
             }
             None => {None}
-        }
-    }
-
-    pub fn print_top(&self) {
-        match &self.top {
-            Some(node) => {
-                println!("Top element: {}", node.value);
-            }
-            None => {
-                println!("Stack is empty!");
-            }
         }
     }
 }
