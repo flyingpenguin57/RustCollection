@@ -5,14 +5,9 @@ pub fn add(left: u64, right: u64) -> u64 {
     left + right
 }
 
-struct S1 {
-    a: u64,
-    b: Option<Box<S1>>
-}
-
-
 #[cfg(test)]
 mod tests {
+    use crate::stack::Stack;
     use super::*;
 
     #[test]
@@ -20,14 +15,26 @@ mod tests {
         let result = add(2, 2);
         assert_eq!(result, 4);
 
-        let v1 = S1 {
-            a: 1,
-            b: Some(Box::new(S1 {a:2,b:None}))
-        };
+        let mut s = Stack::new();
 
-        let v3 = v1.b;
+        s.print_top();
+        s.push(1);
+        s.print_top();
+        s.push(2);
+        s.print_top();
+        s.push(3);
+        s.print_top();
 
 
+        let v1 = s.pop();
+        s.print_top();
+        let v2 = s.pop();
+        s.print_top();
+        let v3 = s.pop();
+        s.print_top();
 
+        println!("get {}", v1.unwrap().value);
+        println!("get {}", v2.unwrap().value);
+        println!("get {}", v3.unwrap().value);
     }
 }

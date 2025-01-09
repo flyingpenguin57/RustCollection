@@ -1,21 +1,19 @@
-struct Node<T> {
-    value: T,
+pub struct Node<T> {
+    pub value: T,
     next: Option<Box<Node<T>>>,
 }
 
-struct Stack<T> {
+pub struct Stack<T> {
     len: u64,
     top: Option<Box<Node<T>>>,
 }
 
-impl<T> Stack<T> {
-    fn new() -> Stack<T> { Self::new_with_len(32) }
+impl<T: std::fmt::Display> Stack<T> {
+    pub fn new() -> Stack<T> { Stack{len: 0,top: None} }
 
-    fn new_with_len(len:u64) -> Stack<T> { Stack{len,top: None} }
-
-    fn push(&mut self, element: T) {
+    pub fn push(&mut self, element: T) {
         //get old top
-        let old_top = *self.top;
+        let old_top = self.top.take();
         //new node next = top
         let new_node = Node{value: element, next: old_top};
         //top = new node
@@ -24,20 +22,29 @@ impl<T> Stack<T> {
         self.len += 1;
     }
 
-    fn pop(&mut self) -> Option<T> {
-        let old_top = self.top;
+    pub fn pop(&mut self) -> Option<Box<Node<T>>> {
+        let old_top = self.top.take();
 
-        match &old_top {
-            Some(node) => {
+        match old_top {
+            Some(mut node) => {
                 //top = old_top next
-                self.top = node.next;
+                self.top = node.next.take();
                 self.len -= 1;
+                Some(node)
             }
-            None => {}
+            None => {None}
         }
+    }
 
-
-        old_top
+    pub fn print_top(&self) {
+        match &self.top {
+            Some(node) => {
+                println!("Top element: {}", node.value);
+            }
+            None => {
+                println!("Stack is empty!");
+            }
+        }
     }
 }
 
